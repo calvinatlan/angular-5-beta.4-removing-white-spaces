@@ -1,0 +1,82 @@
+<h1>Flight Search</h1>
+<div class="row card">
+
+  <form #form="ngForm" roundTrip>
+
+    <div *ngIf="form?.hasError('roundTrip')">roundTrip</div>
+
+  <div class="form-group">
+    <label>From:</label>
+    <input
+      class="form-control"
+      [(ngModel)]="from"
+      [ngModelOptions]="{updateOn: 'blur'}"
+      name="from"
+      minlength="3"
+      required
+      asyncCity
+      maxlength="30"
+      city="Graz,Hamburg,Wien,Paris,Takern2,Frankfurt,Zürich"
+      pattern="[A-Za-zöäüßÖÄÜ]*">
+
+    <div *ngIf="!form?.controls['from']?.valid && form?.controls['from']?.dirty">Fehler</div>
+    <div *ngIf="form?.controls['from']?.hasError('required') && form?.controls['from']?.dirty">Required</div>
+    <div *ngIf="form?.controls['from']?.hasError('minlength')">Minlength</div>
+    <div *ngIf="form?.controls['from']?.hasError('maxlength')">Maxlength</div>
+    <div *ngIf="form?.controls['from']?.hasError('pattern')">Pattern</div>
+    <div *ngIf="form?.controls['from']?.hasError('city')">City</div>
+    <div *ngIf="form?.controls['from']?.hasError('asyncCity')">City</div>
+    <div *ngIf="form?.controls['from']?.pending">
+      <marquee direction="down">Validiere ...</marquee>
+    </div>
+    <!--
+    <div>
+      <pre>
+      {{ form?.controls['from']?.errors | json }}
+      </pre>
+    </div>
+    -->
+    <!-- email -->
+  </div>
+  <div class="form-group">
+    <label>To:</label>
+    <input name="to" class="form-control" [(ngModel)]="to">
+  </div>
+  <div class="form-group">
+    <button class="btn btn-default" [disabled]="!form?.valid" (click)="search()">Search</button>
+  </div>
+  </form>
+</div>
+
+<div class="row">
+<div
+  *ngFor="let f of flights"
+  class="col col-lg-3 col-md-4 col-sm-6 col-xs-12">
+
+  <flight-card
+    [item]="f"
+    [(selected)]="basket[f.id]">
+  </flight-card>
+<!--
+(selectedChange)="basket[f.id] = $event"
+-->
+</div>
+</div>
+<!--
+<div class="card" *ngIf="flights.length > 0">
+  <table class="table table-condensed">
+    <tr *ngFor="let f of flights" [ngClass]="{ 'active': f === selectedFlight }">
+      <td>{{f.id}}</td>
+      <td>{{f.from | city:'short'}}</td>
+      <td>{{f.to | city:'long'}}</td>
+      <td>{{f.date | date:'dd.MM.yyyy HH:mm' }}</td>
+      <td><a (click)="select(f)">Select</a></td>
+    </tr>
+  </table>
+</div>
+-->
+
+<div class="row card">
+  <pre>{{ basket | json }}</pre>
+</div>
+
